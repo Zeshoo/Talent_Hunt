@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Committee Member";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="container mt-4">
+    <!-- Header with Back Button -->
+    <div class="d-flex align-items-center mb-4">
+        <a href="javascript:history.back()" class="btn btn-light shadow-sm">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h2 class="ms-3 text-primary">Committee Member</h2>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="input-group mb-3 shadow-sm">
+        <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+        <input type="text" class="form-control" id="searchInput" placeholder="Search..." onkeyup="filterMembers()">
+    </div>
+
+    <!-- Event ID Input -->
+    <div class="form-group mb-3">
+        <label class="fw-bold">Enter Event ID:</label>
+        <input type="number" id="eventId" class="form-control" placeholder="Event ID" required>
+    </div>
+
+    <!-- Members List -->
+    <div class="list-group">
+        <label class="list-group-item d-flex align-items-center">
+            <input class="form-check-input me-2 member-checkbox" type="checkbox" value="1" data-name="Mr Zahid"> Mr Zahid
+        </label>
+        <label class="list-group-item d-flex align-items-center">
+            <input class="form-check-input me-2 member-checkbox" type="checkbox" value="2" data-name="Mr Shahid"> Mr Shahid
+        </label>
+        <label class="list-group-item d-flex align-items-center">
+            <input class="form-check-input me-2 member-checkbox" type="checkbox" value="3" data-name="Mr Hassan"> Mr Hassan
+        </label>
+        <label class="list-group-item d-flex align-items-center">
+            <input class="form-check-input me-2 member-checkbox" type="checkbox" value="4" data-name="Mr Ahsan"> Mr Ahsan
+        </label>
+    </div>
+
+    <!-- Assign Button -->
+    <div class="d-grid mt-4">
+        <button onclick="assignMembers()" class="btn btn-outline-dark fw-bold">
+            <i class="fas fa-users"></i> Assign Member
+        </button>
+    </div>
+</div>
+
+<!-- JavaScript for Filtering Members & Submission -->
+<script>
+    function filterMembers() {
+        var input = document.getElementById("searchInput").value.toLowerCase();
+        var members = document.querySelectorAll(".list-group-item");
+
+        members.forEach(function (member) {
+            var name = member.innerText.toLowerCase();
+            member.style.display = name.includes(input) ? "block" : "none";
+        });
+    }
+
+    async function assignMembers() {
+        var eventId = document.getElementById("eventId").value;
+        if (!eventId) {
+            alert("Please enter a valid Event ID.");
+            return;
+        }
+
+        var selectedMembers = [];
+        document.querySelectorAll(".member-checkbox:checked").forEach((checkbox) => {
+            selectedMembers.push({
+                CommitteeMemberID: checkbox.value,
+                Status: "Pending", // Default status
+                EventID: eventId
+            });
+        });
+
+        if (selectedMembers.length === 0) {
+            alert("Please select at least one member.");
+            return;
+        }
+
+        try {
+            let response = await fetch("@Url.Action("AssignMember", "Admin")", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(selectedMembers)
+            });
+
+            let result = await response.json();
+
+            if (response.ok) {
+                alert("Assigned Members Successfully!");
+                window.location.reload();
+            } else {
+                alert("Error: " + result.message);
+            }
+        } catch (error) {
+            alert("Request failed: " + error.message);
+        }
+    }
+</script>

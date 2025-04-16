@@ -1,0 +1,38 @@
+﻿@model List<Talent_Hunt.Models.AssignedMemberViewModel>
+
+
+
+@{
+    ViewBag.Title = "Assigned Committee Members";
+}
+
+<div class="container mt-4">
+    <h3 class="text-primary mb-3">Assigned Members</h3>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var member in Model)
+                {
+                    <tr>
+                        <td>@member.MemberName</td>
+                        <td>@member.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning">No committee members assigned to this event.</div>
+    }
+
+    <a href="@Url.Action("DashBoard", "Admin")" class="btn btn-secondary mt-3">Back</a>
+</div>

@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Save Task";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="text-center mb-3">
+        <h2 class="text-primary">Save Task</h2>
+    </div>
+
+    <!-- Task Form -->
+    <div class="shadow p-4 bg-light rounded">
+        <form id="taskForm">
+            <!-- Title Section (Dropdown from Database) -->
+            <div class="mb-3">
+                <label class="fw-bold">Title</label>
+                <select id="eventSelect" name="EventId" class="form-control" required>
+                    <option value="" disabled selected>Select an Event</option>
+                    @if (ViewBag.Events != null)
+                    {
+                        foreach (var eventItem in ViewBag.Events)
+                        {
+                            <option value="@eventItem.Id">@eventItem.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <!-- Event ID (Readonly) -->
+            <div class="mb-3">
+                <label class="fw-bold">Event ID</label>
+                <input type="text" id="eventIdDisplay" class="form-control" readonly />
+            </div>
+
+            <!-- Start Time -->
+            <div class="form-group mt-3">
+                <label class="fw-bold">Task Start Time:</label>
+                <input type="time" id="startTime" name="StartTime" class="form-control" required />
+            </div>
+
+            <!-- End Time -->
+            <div class="form-group mt-3">
+                <label class="fw-bold">Task End Time:</label>
+                <input type="time" id="endTime" name="EndTime" class="form-control" required />
+            </div>
+
+            <!-- Task Details -->
+            <div class="mb-3">
+                <label class="fw-bold">Detail</label>
+                <textarea class="form-control" name="Description" placeholder="Enter task details..." required></textarea>
+            </div>
+
+            <!-- Save Button -->
+            <div class="text-center mt-4">
+                <button type="button" id="saveTaskBtn" class="btn btn-primary rounded-circle" style="width: 60px; height: 60px; font-size: 30px;">
+                    +
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- jQuery for handling the event selection and saving -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // 📌 When user selects an event, display its ID in the Event ID field
+        $("#eventSelect").change(function () {
+            var selectedId = $(this).val();
+            $("#eventIdDisplay").val(selectedId);
+        });
+
+        // 📌 Save Task to API
+        $("#saveTaskBtn").click(function () {
+            var formData = {
+                EventId: $("#eventSelect").val(),
+                StartTime: $("#startTime").val(),
+                EndTime: $("#endTime").val(),
+                Description: $("textarea[name='Description']").val()
+            };
+
+            $.ajax({
+                url: "@Url.Action("SaveTask", "Admin")",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $("#taskForm")[0].reset(); // Reset form after successful save
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Something went wrong!");
+                }
+            });
+        });
+    });
+</script>

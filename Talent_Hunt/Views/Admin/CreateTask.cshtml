@@ -1,0 +1,97 @@
+﻿@model List<Talent_Hunt.Models.Event>
+
+@{
+    ViewBag.Title = "Create Task";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="container mt-4">
+    <div class="text-center mb-3">
+        <h2 class="text-primary">Create Task</h2>
+    </div>
+
+    <div class="shadow p-4 bg-light rounded">
+        <form id="taskForm">
+            <!-- Event Dropdown -->
+            <div class="mb-3">
+                <label class="fw-bold">Event Title</label>
+                <select id="eventSelect" name="EventID" class="form-control" required>
+                    <option value="" disabled selected>Select an Event</option>
+                    @foreach (var eventItem in Model)
+                    {
+                        <option value="@eventItem.Id">@eventItem.Title</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Event ID Display -->
+            <div class="mb-3">
+                <label class="fw-bold">Event ID</label>
+                <input type="text" id="eventIdDisplay" class="form-control" readonly />
+            </div>
+
+            <!-- Start Time -->
+            <div class="form-group mt-3">
+                <label class="fw-bold">Task Start Time:</label>
+                <input type="time" id="StartTime" class="form-control" required />
+            </div>
+
+            <!-- End Time -->
+            <div class="form-group mt-3">
+                <label class="fw-bold">Task End Time:</label>
+                <input type="time" id="EndTime" class="form-control" required />
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label class="fw-bold">Task Detail</label>
+                <textarea class="form-control" id="Description" placeholder="Enter task details..." required></textarea>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="button" id="saveTaskBtn" class="btn btn-primary rounded-circle" style="width: 60px; height: 60px; font-size: 30px;">
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#eventSelect").change(function () {
+            $("#eventIdDisplay").val($(this).val());
+        });
+
+        $("#saveTaskBtn").click(function () {
+            const payload = {
+                EventID: parseInt($("#eventSelect").val()),
+                StartTime: $("#StartTime").val(),
+                EndTime: $("#EndTime").val(),
+                Description: $("#Description").val()
+            };
+
+            $.ajax({
+                url: "@Url.Action("CreateTask", "Admin")",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(payload),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $("#taskForm")[0].reset();
+                        $("#eventIdDisplay").val("");
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("❌ Something went wrong.");
+                }
+            });
+        });
+    });
+</script>

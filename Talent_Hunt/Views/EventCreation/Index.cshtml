@@ -1,0 +1,150 @@
+﻿@{
+    ViewBag.Title = "Create Event";
+}
+
+<h2>Create New Event</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["Success"]</div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger text-center">@ViewBag.Error</div>
+}
+
+<form action="@Url.Action("CreateEvent", "EventCreation")" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Event Title:</label>
+        <input type="text" name="eventTitle" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Description:</label>
+        <textarea name="description" class="form-control" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Registration Start Date:</label>
+        <input type="date" name="regStartDate" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Registration End Date:</label>
+        <input type="date" name="regEndDate" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Event Date:</label>
+        <input type="date" name="eventDate" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Rules:</label><br />
+        <div class="form-check">
+            <input type="checkbox" name="selectedRules" value="1st" class="form-check-input" />
+            <label class="form-check-label">1st Semester</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" name="selectedRules" value="2nd" class="form-check-input" />
+            <label class="form-check-label">2nd Semester</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" name="selectedRules" value="3rd" class="form-check-input" />
+            <label class="form-check-label">3rd Semester</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" name="selectedRules" value="4th" class="form-check-input" />
+            <label class="form-check-label">4th Semester</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Start Time:</label>
+        <input type="time" name="startTime" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>End Time:</label>
+        <input type="time" name="endTime" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Upload Event Image:</label>
+        <input type="file" name="eventImage" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Event</button>
+</form>
+@{
+    ViewBag.Title = "Create Event";
+}
+
+<h2>Create New Event</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["Success"]</div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger text-center">@ViewBag.Error</div>
+}
+
+<form action="@Url.Action("CreateEvent", "EventCreation")" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Event Title:</label>
+        <input type="text" name="eventTitle" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Description:</label>
+        <textarea name="description" class="form-control" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Registration Start Date:</label>
+        <input type="date" name="regStartDate" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Registration End Date:</label>
+        <input type="date" name="regEndDate" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Event Date:</label>
+        <input type="date" name="eventDate" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Rules:</label><br />
+        <input type="checkbox" name="rules[]" value="1st Semester" /> 1st Semester
+        <input type="checkbox" name="rules[]" value="2nd Semester" /> 2nd Semester<br />
+        <input type="checkbox" name="rules[]" value="3rd Semester" /> 3rd Semester
+        <input type="checkbox" name="rules[]" value="4th Semester" /> 4th Semester<br />
+        <input type="checkbox" name="rules[]" value="5th Semester" /> 5th Semester
+        <input type="checkbox" name="rules[]" value="6th Semester" /> 6th Semester<br />
+        <input type="checkbox" name="rules[]" value="7th Semester" /> 7th Semester
+        <input type="checkbox" name="rules[]" value="8th Semester" /> 8th Semester
+    </div>
+
+    <div class="form-group">
+        <label>Start Time:</label>
+        <input type="time" name="startTime" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>End Time:</label>
+        <input type="time" name="endTime" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Upload Event Image:</label>
+        <input type="file" name="eventImage" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Event</button>
+</form>
